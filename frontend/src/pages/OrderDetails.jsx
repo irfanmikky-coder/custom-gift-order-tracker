@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../lib/api';
 import StatusTimeline from '../components/StatusTimeline';
-import { ArrowLeft, User, Package, Calendar, Clock, History, Printer, Phone, Truck } from 'lucide-react';
+import { ArrowLeft, User, Package, Calendar, Clock, History, Printer, Phone, Truck, Mail, FileText } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const WORKFLOW_STATUSES = [
@@ -66,9 +66,9 @@ function OrderDetails() {
   if (error) return <div style={{ color: '#ef4444', padding: '1rem', background: 'rgba(239, 68, 68, 0.1)', borderRadius: 'var(--radius-md)' }}>{error}</div>;
   if (!order) return <div>Order not found</div>;
 
-  // Calculate estimated delivery (14 days from creation)
+  // Use deliveryDate from DB if it exists, otherwise fallback to +14 days for legacy data
   const createdDate = new Date(order.createdAt);
-  const estimatedDelivery = new Date(createdDate.getTime() + 14 * 86400000);
+  const estimatedDelivery = order.deliveryDate ? new Date(order.deliveryDate) : new Date(createdDate.getTime() + 14 * 86400000);
 
   return (
     <div className="order-details-page">
@@ -126,6 +126,15 @@ function OrderDetails() {
                 </p>
               </div>
             )}
+            {order.customerEmail && (
+              <div>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Email</p>
+                <p style={{ fontSize: '1.125rem', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Mail size={16} color="var(--text-secondary)" className="print-icon" />
+                  <a href={`mailto:${order.customerEmail}`} style={{ color: 'inherit', textDecoration: 'none' }}>{order.customerEmail}</a>
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -173,14 +182,34 @@ function OrderDetails() {
       </div>
 
       {/* Design Notes */}
-      <div className="glass-card print-card" style={{ marginBottom: '2rem' }}>
-        <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Design & Personalization Notes</h2>
-        <div style={{ background: 'var(--bg-primary)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-          {order.designNotes ? (
-            <p style={{ lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{order.designNotes}</p>
-          ) : (
-            <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>No design notes provided.</p>
-          )}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+        <div className="glass-card print-card">
+          <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <FileText size={20} color="var(--accent-primary)" className="print-icon"/>
+            Design & Personalization Notes
+          </h2>
+          <div style={{ background: 'var(--bg-primary)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', height: 'calc(100% - 3rem)' }}>
+            {order.designNotes ? (
+              <p style={{ lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{order.designNotes}</p>
+            ) : (
+              <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>No personalization details provided.</p>
+            )}
+          </div>
+        </div>
+
+        {/* Additional Notes */}
+        <div className="glass-card print-card">
+          <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <FileText size={20} color="var(--text-secondary)" className="print-icon"/>
+            Additional Notes
+          </h2>
+          <div style={{ background: 'var(--bg-primary)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', height: 'calc(100% - 3rem)' }}>
+            {order.additionalNotes ? (
+              <p style={{ lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{order.additionalNotes}</p>
+            ) : (
+              <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>No additional notes provided.</p>
+            )}
+          </div>
         </div>
       </div>
 

@@ -19,13 +19,13 @@ router.get('/:id', (req, res) => {
 
 // Create a new order
 router.post('/', (req, res) => {
-  const { customerName, product, designNotes } = req.body;
+  const { customerName, phoneNumber, product, designNotes, deliveryDate, customerEmail, additionalNotes } = req.body;
   
-  if (!customerName || !product) {
-    return res.status(400).json({ success: false, message: 'Customer name and product are required' });
+  if (!customerName || !phoneNumber || !product || !deliveryDate) {
+    return res.status(400).json({ success: false, message: 'Customer name, phone number, product type, and delivery date are required' });
   }
 
-  const newOrder = mockData.createOrder({ customerName, product, designNotes });
+  const newOrder = mockData.createOrder({ customerName, phoneNumber, product, designNotes, deliveryDate, customerEmail, additionalNotes });
   res.status(201).json({ success: true, data: newOrder });
 });
 
