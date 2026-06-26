@@ -25,7 +25,7 @@ This guide covers deploying the frontend to Netlify and the backend to Render.
 4. Fill in the following details:
    - **Base directory:** `frontend`
    - **Build command:** `npm run build`
-   - **Publish directory:** `frontend/dist`
+   - **Publish directory:** `dist`
 5. Click **Show advanced** and add your environment variables from your local `frontend/.env` file:
    - `VITE_FIREBASE_API_KEY`
    - `VITE_FIREBASE_AUTH_DOMAIN`
