@@ -135,7 +135,7 @@ function Dashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
         <div className="glass-card chart-card">
           <h2 style={{ marginBottom: '1.5rem' }}>Orders by Status</h2>
-          <div style={{ height: '300px' }}>
+          <div style={{ height: '300px', minHeight: 0, minWidth: 0 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={statusChartData} margin={{ top: 10, right: 10, left: -20, bottom: 40 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
@@ -156,7 +156,7 @@ function Dashboard() {
 
         <div className="glass-card chart-card">
           <h2 style={{ marginBottom: '1.5rem' }}>Orders Created Per Day</h2>
-          <div style={{ height: '300px' }}>
+          <div style={{ height: '300px', minHeight: 0, minWidth: 0 }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={dateChartData} margin={{ top: 10, right: 10, left: -20, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
